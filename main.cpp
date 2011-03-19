@@ -7,22 +7,27 @@
 using namespace std;
 
 int main(int argc, char* argv) {
-	int N = 2048;
-	double dr = 0.02;
+	int N = 4096;
+	double dr = 0.01;
 	double R[2] = {0.5,1.0};
 	double mu[2] = {0.0,0.0};
-	double alpha = 0.08;
+	double alpha = 0.02;
 
+	unsigned int innercount = 50;
+
+	cout << "Initialising: ";
+
+	
 	nahs_planar *myDFT = new nahs_planar(N, dr, R, 0.2);
 
-	cout << "Initialised"<< endl; 
+	cout << "Functional loaded, ";
 
 	double rhob[2] = {0.01,0.01};
-	rhob[0] = 4.223539288213692364e-05;
-	rhob[1] = 1.275666657617313959e-01;
+//	rhob[0] = 4.223539288213692364e-05;
+//	rhob[1] = 1.275666657617313959e-01;
 
-//	rhob[0] = 8.195416335694483134e-03;
-//	rhob[1] = 9.004472879821673326e-02;
+	rhob[0] = 8.195416335694483134e-03;
+	rhob[1] = 9.004472879821673326e-02;
 //	rhob[0] = 8.312891860807745600e-03;
 //	rhob[1] =  8.984551185446439103e-02;
 //	rhob[0] = 1.546224012985698837e-02;
@@ -30,11 +35,11 @@ int main(int argc, char* argv) {
 
 	myDFT->set_rho(rhob);
 
-	cout << "rho set";
+	cout << "rho set, ";
 
 	myDFT->calc_c1();
 
-	cout << "c1 calced" << endl;
+	cout << "c1 calced, ";
 
 
 	ofstream newfile("results/c1.dat");	
@@ -64,18 +69,19 @@ int main(int argc, char* argv) {
 	mu[0] = log(rhob[0]) + myDFT->get_c1(0,N/2);
 	mu[1] = log(rhob[1]) + myDFT->get_c1(1,N/2);
 
-	cout << "Omega" << (myDFT->calc_F()/N*dr) << endl;
+//	cout << "Omega" << (myDFT->calc_F()/N*dr) << endl;
 
 
 //	myDFT->load_rho();
+	cout << " all done." << endl;
 
-	cout << "alldone" << endl;
+	cout << "Minimising:" << endl;
 
 	myDFT->hardwall();
 
 	for (unsigned int loop = 0; loop < 1<<30; ++loop) {
 
-		for (unsigned int inner = 0; inner < 21; ++inner) {
+		for (unsigned int inner = 0; inner < innercount; ++inner) {
 			myDFT->calc_c1();
 			c1_max = 0.0;
 
@@ -93,7 +99,7 @@ int main(int argc, char* argv) {
 			
 		}
 
-		cout << loop << " Error: " << c1_max << endl;
+		cout << loop*innercount << " Error: " << c1_max << endl;
 
 		newfile.open("results/rho_cur.dat");		
 		for (int i =0; i < N; ++i) {

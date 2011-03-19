@@ -203,7 +203,7 @@ nahs_planar::nahs_planar(int N, double dr, double R[2], double Delta) {
 		for (int i = 0; i < NK; ++i) {
 			a += K_[j*NK + i];
 		}
-	cout << a << endl;
+//	cout << a << endl;
 	}
 
 	free(H);
@@ -213,7 +213,7 @@ nahs_planar::nahs_planar(int N, double dr, double R[2], double Delta) {
 	free(D3);
 	free(D4);
 
-	cout << "Just saving..";
+//	cout << "Just saving..";
 
 	// Output the weight functions in real and Fourier space.
 	ofstream newfile("results/wk.dat");	
@@ -246,7 +246,7 @@ nahs_planar::nahs_planar(int N, double dr, double R[2], double Delta) {
 	} // end i loop
 	newfile.close();
 
-	cout << "done" << endl;
+//	cout << "done" << endl;
 }
 
 
